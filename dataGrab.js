@@ -1,43 +1,23 @@
 'use strict';
-
+var express    = require('express');
+var app  = express();  
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
+var bodyParser = require('body-parser');
 
 // Connection URL
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 8080;        // set our port
+
 const yelp = require('yelp-fusion');
 const client = yelp.client('pKMXcbNJkZVaIcXByLxgpVSYBDCULOGGbY6NFsDqcSY2kndHrDm-WL59Re8XDhhuibgq8yGWm-pNJvfKbwYJ4Gtrderjtsp9VAPI5nDtCzxs_EgcIVc99LrL4yPqW3Yx');
 var url = 'mongodb://localhost:27017/otherBird';
 
-function createDb() {
-  MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("otherBird");
-    dbo.createCollection("ReviewsFinal", function (err, res) {
-      if (err) throw err;
-      console.log("Collection created!");
-      db.close();
-    });
-  });
-}
-//createDb();
-//getDataYelp();
-function testInsert(obj) {
-  MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("otherBird");
-    //var myobj = { name: "Company Inc", address: "Highway 37" };
-    dbo.collection("ReviewsFinal").insertOne(obj, function (err, res) {
-      if (err) throw err;
-      console.log("1 document inserted");
-      db.close();
-    });
-  });
-}
-
-//testInsert();
-function grabAll() {
+var router = express.Router(); 
+router.get('/results', function(req, res) {
   var rapscallionId = [];
-  var dataarray = [];
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("otherBird");
@@ -57,15 +37,56 @@ function grabAll() {
           if (!(isEmpty(tmp))) {
             dataarray.push(tmp);
           }
-          //}
         }
       }
-      console.log(dataarray);
+      res.send(dataarray);
+      //console.log(dataarray);
+      //return dataarray;
+    });
+    db.close();
+  });
+  //console.log(dataarray);
+  //res.json({ message: 'hooray! welcome to our api!' });   
+});
+app.use('/api', router);
+//router.get('/', (req, res) => {
+//  arr = grabAll();
+//  res.send(arr);
+//});
+
+function createDb() {
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("otherBird");
+    dbo.createCollection("ReviewsFinal", function (err, res) {
+      if (err) throw err;
+      console.log("Collection created!");
       db.close();
     });
   });
 }
-grabAll();
+//cleanup();
+//createDb();
+//getDataYelp();
+function testInsert(obj) {
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("otherBird");
+    //var myobj = { name: "Company Inc", address: "Highway 37" };
+    dbo.collection("ReviewsFinal").insertOne(obj, function (err, res) {
+      if (err) throw err;
+      console.log("1 document inserted");
+      db.close();
+    });
+  });
+}
+
+//testInsert();
+var dataarray = [];
+function grabAll() {
+  
+}
+//grabAll();
 function cleanup() {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
@@ -119,3 +140,4 @@ function isEmpty(obj) {
   }
   return true;
 }
+app.listen(port);
