@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="chart.js"></script>
+  <link rel="stylesheet" href="guiStyles.css"> 
+</head>
+
+<body>
+
+  <h1>Other Bird Data Aggregation</h1>
+
+  <label for = "startDate">Start Date:</label>
+  <input type="date" name="start" id="startDate"
+  value="2018-01-01" 
+  min = "2017-01-01"
+  max = "2018-12-31">
+
+  <br>
+
+  <label for = "endDate">End Date:</label>  &nbsp
+  <input type="date" name="end" id="endDate"
+  value="2018-01-02" 
+  min = "2017-01-01"
+  max = "2018-12-31">
+
+  <button onclick="update()">Submit</button>
+
+  <p id="chartInfo">No Date Selected</p>
+
+  <canvas id="myChart"></canvas>
+
+  <script src="main.js"></script>
+
+
+</body>
+
+</html>
