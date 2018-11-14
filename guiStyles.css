@@ -1,0 +1,13 @@
+.hidden {display:none;}
+.show {display:inline !important;}
+
+label {
+	color: black;
+	font-size: 10;
+}
+
+canvas {
+	border: solid;
+	width: 600px !important;
+	height: 600px !important
+}
