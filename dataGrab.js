@@ -39,6 +39,7 @@ router.get('/results', function(req, res) {
             Id.push(result[i].Data[k].id);
             tmp.name = result[i].name;
             tmp.id = result[i].Data[k].id;
+            tmp.review = result[i].Data[k].text
             tmp.rating = result[i].Data[k].rating;
             tmp.datetime = result[i].Data[k].time_created
             if (!(isEmpty(tmp))) {
