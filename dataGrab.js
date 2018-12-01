@@ -16,13 +16,17 @@ const client = yelp.client('pKMXcbNJkZVaIcXByLxgpVSYBDCULOGGbY6NFsDqcSY2kndHrDm-
 var url = 'mongodb://localhost:27017/otherBird';
 
 var router = express.Router(); 
+
+function onlyUnique(value, index, self) { 
+  return self.indexOf(value) === index;
+}
 router.get('/results', function(req, res) {
   var rapscallionId = [];
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("otherBird");
     dbo.collection("ReviewsFinal").find({}).toArray(function (err, result) {
-      if (err) throw err;;
+      if (err) throw err;
       for (let i = 0; i < result.length; i++) {
         //if(result[i].name == "The Rapscallion"){
         for (let j = 0; j < result[i].Data.length; j++) {
@@ -39,7 +43,8 @@ router.get('/results', function(req, res) {
           }
         }
       }
-      res.send(dataarray);
+      var finaldata=dataarray.filter(onlyUnique);
+      res.send(finaldata);
       //console.log(dataarray);
       //return dataarray;
     });
@@ -65,7 +70,7 @@ function createDb() {
 //cleanup();
 //createDb();
 //getDataYelp();
-var timer=setInterval(getDataYelp,5000);
+var timer=setInterval(getDataYelp,3600000);
 function testInsert(obj) {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
