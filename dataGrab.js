@@ -21,7 +21,9 @@ function onlyUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 router.get('/results', function(req, res) {
-  var rapscallionId = [];
+  var Id = [];
+  var uniquearr = [];
+  var dataarray = [];
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("otherBird");
@@ -29,17 +31,19 @@ router.get('/results', function(req, res) {
       if (err) throw err;
       for (let i = 0; i < result.length; i++) {
         //if(result[i].name == "The Rapscallion"){
-        for (let j = 0; j < result[i].Data.length; j++) {
-          var tmp = {};
-          if ((rapscallionId.indexOf(result[i].Data[j].id)) == -1) {
-            rapscallionId.push(result[i].Data[j].id);
+        for(let k=0;k<3;k++){
+          var id= result[i].Data[k].id;
+          if(!(uniquearr.includes(id))){
+            uniquearr.push(result[i].Data[k].id);
+            var tmp = {};
+            Id.push(result[i].Data[k].id);
             tmp.name = result[i].name;
-            tmp.id = result[i].Data[j].id;
-            tmp.rating = result[i].Data[j].rating;
-            tmp.datetime = result[i].Data[j].time_created
-          }
-          if (!(isEmpty(tmp))) {
-            dataarray.push(tmp);
+            tmp.id = result[i].Data[k].id;
+            tmp.rating = result[i].Data[k].rating;
+            tmp.datetime = result[i].Data[k].time_created
+            if (!(isEmpty(tmp))) {
+              dataarray.push(tmp);
+            }
           }
         }
       }
@@ -70,7 +74,7 @@ function createDb() {
 //cleanup();
 //createDb();
 //getDataYelp();
-var timer=setInterval(getDataYelp,3600000);
+//var timer=setInterval(getDataYelp,3600000);
 function testInsert(obj) {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
@@ -85,7 +89,7 @@ function testInsert(obj) {
 }
 
 //testInsert();
-var dataarray = [];
+
 function cleanup() {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
