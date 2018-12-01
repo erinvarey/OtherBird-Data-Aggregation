@@ -1,4 +1,15 @@
+const Url = "http://localhost:8080/api/results";
+
 function makeLineChart(chartTitle, muleData, rapData){
+	$.get(Url, function(data,status){
+		console.log(data)
+	
+	bigString = "";
+	for (i = 0; i < data.length; i++) {
+		bigString = bigString + data[i].name + "<br>" + data[i].datetime + "<br>" + data[i].rating + "<br>" + "<br>";
+	}
+	document.getElementById("dataDump").innerHTML = bigString;
+	
 	var ctx = document.getElementById("myChart").getContext('2d');
 	var myChart = new Chart(ctx, {
 		type: 'line',
@@ -48,12 +59,13 @@ function makeLineChart(chartTitle, muleData, rapData){
 			},
 		}
 	});
+	});
 }
 
 function update() {
 	var muleData = [4.6, 4.5, 4.1, 3.8, 4.5, 4.2, 4.3];
 	var rapData = [2.6, 2.5, 2.1, 2.8, 2.5, 2.2, 2.3];
-	
+
 	var start = document.getElementById("startDate").value;
 	var end = document.getElementById("endDate").value;
 	var dateRange = start + " to " + end;
@@ -66,5 +78,17 @@ function update() {
 	} else {
 		document.getElementById("chartInfo").innerHTML = "Please ensure the start date is earlier than the end date";
 	}
-	
+
 }
+
+function main() {
+	//getData();
+	update();
+}
+
+function updateEmails() {
+	var userEmail = document.getElementById("emailInput").value;
+	document.getElementById("emailDisplay").innerHTML = userEmail;
+}
+
+
