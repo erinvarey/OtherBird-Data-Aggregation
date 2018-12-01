@@ -49,10 +49,7 @@ router.get('/results', function(req, res) {
   //res.json({ message: 'hooray! welcome to our api!' });   
 });
 app.use('/api', router);
-//router.get('/', (req, res) => {
-//  arr = grabAll();
-//  res.send(arr);
-//});
+
 
 function createDb() {
   MongoClient.connect(url, function (err, db) {
@@ -68,6 +65,7 @@ function createDb() {
 //cleanup();
 //createDb();
 //getDataYelp();
+var timer=setInterval(getDataYelp,5000);
 function testInsert(obj) {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
@@ -83,10 +81,6 @@ function testInsert(obj) {
 
 //testInsert();
 var dataarray = [];
-function grabAll() {
-  
-}
-//grabAll();
 function cleanup() {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
@@ -101,7 +95,7 @@ function cleanup() {
 // the Rapscallion = iShdeC-lrtqi0VQhHs3Y4A
 //apiId = 'ayupbX4GNeCZ1jCkemVgyg';
 
-//Some test code for getting the Business ID for review searches
+//How to get the ID of a restuarant to search
 /*
 client.search({
   term:'The Rapscallion',
